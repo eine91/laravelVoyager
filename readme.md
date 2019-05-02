@@ -72,6 +72,6 @@ The Laravel framework is open-source software licensed under the [MIT license](h
 
 ## File chnages
 
-App\User.php
-App\Http\COntroller\Auth\RegisterController.php
-config\voyager.php
+- App\User.php
+- App\Http\COntroller\Auth\RegisterController.php
+- config\voyager.php
