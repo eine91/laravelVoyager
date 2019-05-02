@@ -16,7 +16,7 @@ class User extends \TCG\Voyager\Models\User
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password','role_id'
     ];
 
     /**
@@ -36,4 +36,14 @@ class User extends \TCG\Voyager\Models\User
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function isSuperAdmin()
+    {
+        if ($this->email === 'aniket@rwmediaworks.com') {
+            return true;
+        }
+
+        return false;
+    }
 }
