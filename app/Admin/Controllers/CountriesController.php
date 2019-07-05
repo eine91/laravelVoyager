@@ -117,7 +117,7 @@ class CountriesController extends Controller
 
             $form->multipleSelect('country_code', 'Country')->options(['1' => 'Monday', '2' => 'Tuesday', '3' => 'Wednesday', '4' => 'Thursday', '5' => 'Friday', '6' => 'Saturday', '0' => 'Sunday']);
 
-            $form->multipleImage('contacts', 'Images')->path('/storage/ImagesCountries');
+            $form->multipleImage('contacts', 'Images')->removable();
 
 
         })->tab('City Info',function($form){
@@ -161,7 +161,7 @@ class CountriesController extends Controller
 
                 $path = $image->storeAs("public/ImagesCountries/$year/$month", $fileNameToStore);
 
-                $fileLocations[] = "storage/ImagesCountries/$year/$month/".$fileNameToStore;
+                $fileLocations[] = "ImagesCountries/$year/$month/".$fileNameToStore;
             }
 
             $validatedData['contacts'] = $fileLocations;
@@ -172,6 +172,46 @@ class CountriesController extends Controller
         $validatedData['country_name'] = 'India';
         
         Country::create($validatedData);
+
+    }
+
+
+    public function update(Country $country)
+    {
+        $validation = request()->validate([
+
+
+        ]);
+
+        if(request()->hasfile('contacts'))
+        {
+
+            $fileLocations = [];
+            foreach(request()->file('contacts') as $image)
+            {
+                $filenameWithExt = $image->getClientOriginalName();
+                // Get just filename
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                // Get just ext
+                $extension = $image->getClientOriginalExtension();
+                // Filename to store
+                $fileNameToStore= $filename.'_'.time().'.'.$extension;
+                // Upload Image
+
+                $year = gmdate('Y');
+
+                $month = gmdate('m');
+
+                $path = $image->storeAs("public/ImagesCountries/$year/$month", $fileNameToStore);
+
+                $fileLocations[] = "ImagesCountries/$year/$month/".$fileNameToStore;
+            }
+
+            $country->contacts = $fileLocations;
+        }
+
+        
+        $country->save();
 
     }
 }
